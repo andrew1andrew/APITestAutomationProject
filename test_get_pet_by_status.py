@@ -6,7 +6,7 @@ def get_pet(status):
     data = {"status": status}
     response = requests.get(url, params=data)
     assert response.status_code == 200, "Wrong response code"
-    # assert "category" in response.json(), "No main value for key status"
+    assert "category" in response.json(), "No main value for key status"
 
 
 class TestGetPetByStatus:
