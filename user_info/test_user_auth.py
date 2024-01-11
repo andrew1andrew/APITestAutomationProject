@@ -22,7 +22,7 @@ class TestUserAuth:
         response = requests.post(f"{LinksUser.HOST}", json=body)
         assert response.status_code == 200, "Wrong response code"
         assert "message" in response.json(), "There is no message with success key message in the response"
-
+        #eqw
 
     @staticmethod
     def test_user_auth():
