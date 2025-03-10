@@ -122,3 +122,27 @@ def test_delete_pet(pet_api, create_pet):
 
     with allure.step('Сheck the status code is 404 (pet is deleted)'):
         assert rs.status_code == 404, f'Pet with id {pet_id} is not deleted'
+
+
+def test_get_pet_by_status_using_mock(mocker, pet_api):
+    """Summary.
+
+    - mock the API response to return a 500 error
+    - send a GET request to "/pet/findByStatus"
+    check:
+        - check the status code is 500
+        - check the response contains error message
+    """
+    mock_response = mocker.Mock()
+    mock_response.status_code = 500
+    mock_response.json.return_value = {"error": "Internal Server Error"}
+    mocker.patch.object(pet_api, 'get_pet_by_status', return_value=mock_response)
+
+    with allure.step('Send a GET request to "/pet/findByStatus" with mocked server error'):
+        rs = pet_api.get_pet_by_status(params={})
+
+    with allure.step('Check the status code is 500'):
+        assert rs.status_code == 500, f"Expected status code 500, but got {rs.status_code}"
+
+    with allure.step('Check the response contains error message'):
+        assert rs.json() == {"error": "Internal Server Error"}, f"Unexpected error response {rs.json()}"
